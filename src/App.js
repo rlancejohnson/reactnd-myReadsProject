@@ -5,6 +5,10 @@ import './App.css';
 import BookHome from './BookHome.js';
 import BookSearch from './BookSearch.js';
 
+const searchTerms = [
+  'Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket', 'Cycling', 'Desai', 'Design', 'Development', 'Digital', 'Marketing', 'Drama', 'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film', 'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey', 'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make', 'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting', 'Philosophy', 'Photography', 'Poetry', 'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual', 'Reality', 'Web Development', 'iOS'
+];
+
 export default class BooksApp extends Component {
   state = {
     lists: [
@@ -32,17 +36,28 @@ export default class BooksApp extends Component {
     this.setState({
       searchTerm,
       timeout: setTimeout(() => {
-        BooksAPI.search(this.state.searchTerm.trim(), 20).then((results) => {
-          this.setState({
-            searchResults: results.filter(result => result.authors && result.imageLinks && result.imageLinks.smallThumbnail).map(item => {
-              const book = this.state.books.find(item2 => item2.id === item.id);
+        let term = '';
 
-              item['shelf'] = book ? book.shelf : '';
+        searchTerm.trim().includes(' ') ? searchTerm.trim().split(' ').forEach(word => term += word[0].toUpperCase() + word.substring(1) + ' ') : term = searchTerm[0].toUpperCase() + searchTerm.substring(1);
 
-              return item;
+        term = term.trim();
+
+        if (searchTerms.includes(term)) {
+          BooksAPI.search(term, 20)
+            .then((results) => {
+              if (results && results.length > 0) {
+                this.setState({
+                  searchResults: results.filter(result => result.authors && result.imageLinks && result.imageLinks.smallThumbnail).map(item => {
+                    const book = this.state.books.find(item2 => item2.id === item.id);
+
+                    item['shelf'] = book ? book.shelf : '';
+
+                    return item;
+                  })
+                })
+              }
             })
-          })
-        })
+        }
       }, 500)
     })
   }
