@@ -52,6 +52,14 @@ export default class BooksApp extends Component {
 
     let books = this.state.books;
 
+    if(this.state.searchResults) {
+      this.state.searchResults.forEach(result => {
+        if(result.id === book.id) {
+          book.shelf = list;
+        }
+      })
+    }
+
     if(list === 'none') {
       this.setState({
         books: books.filter(item => item.id !== book.id)
