@@ -11,10 +11,6 @@ export default ({ lists, list, books, updateBook }) => {
       <div className="bookshelf-books">
         <ol className="books-grid">
           {books && books.map((book) => (
-            book.authors &&
-            book.imageLinks &&
-            book.imageLinks.smallThumbnail &&
-
             <Book key={book.id} lists={lists} book={book} updateBook={updateBook} />
           ))}
         </ol>
