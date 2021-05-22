@@ -20,7 +20,7 @@ export default ({ lists, book, updateBook }) => {
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">{book.authors.map(author => (
-          <div>{author}</div>
+          <div key={author}>{author}</div>
         ))}</div>
       </div>
     </li>
