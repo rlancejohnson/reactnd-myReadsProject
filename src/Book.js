@@ -8,7 +8,7 @@ export default ({ lists, book, updateBook }) => {
         <div className="book-top">
           <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.smallThumbnail}")` }}></div>
           <div className="book-shelf-changer">
-            <select onChange={(event) => updateBook(book, event.target.value)} value={book.shelf}>
+            <select onChange={(event) => updateBook(book, event.target.value)} value={book.shelf ? book.shelf : 'none'}>
               <option value="move" disabled>Move to...</option>
               <option value="none">None</option>
               {lists.map((list) => (
