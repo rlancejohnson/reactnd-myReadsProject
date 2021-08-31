@@ -20,15 +20,15 @@ export default class BooksApp extends Component {
     searchTerm: '',
     searchResults: [],
     timeout: ''
-  }
+  };
 
   componentDidMount = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({
         books
-      })
-    })
-  }
+      });
+    });
+  };
 
   searchBooks = (searchTerm) => {
     this.state.timeout && clearTimeout(this.state.timeout);
@@ -54,13 +54,13 @@ export default class BooksApp extends Component {
 
                     return item;
                   })
-                })
+                });
               }
-            })
+            });
         }
       }, 500)
-    })
-  }
+    });
+  };
 
   updateBook = (book, list) => {
     BooksAPI.update(book, list).then();
@@ -72,13 +72,13 @@ export default class BooksApp extends Component {
         if (result.id === book.id) {
           book.shelf = list;
         }
-      })
+      });
     }
 
     if (list === 'none') {
       this.setState({
         books: books.filter(item => item.id !== book.id)
-      })
+      });
 
     } else {
       let bookExists = false;
@@ -93,35 +93,35 @@ export default class BooksApp extends Component {
       if (bookExists) {
         this.setState({
           books
-        })
+        });
 
       } else {
         book.shelf = list;
 
         this.setState({
           books: [...books, book]
-        })
+        });
       }
     }
-  }
+  };
 
   resetSearch = () => {
     this.setState({
       searchTerm: '',
       searchResults: []
-    })
-  }
+    });
+  };
 
   render() {
-    const { lists, books, searchTerm, searchResults } = this.state
+    const { lists, books, searchTerm, searchResults } = this.state;
 
     return (
       <Router>
         <div className="app">
-          <Route exact path='/'>
+          <Route exact path="/">
             <BookHome appName="MyReads" lists={lists} books={books} updateBook={this.updateBook} />
           </Route>
-          <Route path='/search'>
+          <Route path="/search">
             <BookSearch lists={lists}
               searchTerm={searchTerm}
               searchBooks={this.searchBooks}
@@ -131,6 +131,6 @@ export default class BooksApp extends Component {
           </Route>
         </div>
       </Router>
-    )
+    );
   }
 }

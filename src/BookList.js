@@ -1,6 +1,5 @@
-import React from 'react'
-//import PropTypes from 'prop-types'
-import Book from './Book.js'
+import React from 'react';
+import Book from './Book.js';
 
 export default ({ lists, list, books, updateBook }) => {
   return (
@@ -16,5 +15,5 @@ export default ({ lists, list, books, updateBook }) => {
         </ol>
       </div>
     </div>
-  )
-}
+  );
+};
