@@ -11,7 +11,8 @@ const searchTerms = [
 ];
 
 /**
- * @constructor The main books app component
+ * The main books app component
+ * @constructor
  */
 export default class BooksApp extends Component {
   state = {

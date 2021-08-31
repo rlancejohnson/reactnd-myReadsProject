@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import BookList from './BookList.js';
 
 /**
- * @constructor The search page of the books app
+ * The search page of the books app
+ * @constructor
  */
 export default class BookSearch extends Component {
   /**
