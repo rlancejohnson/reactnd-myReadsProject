@@ -1,6 +1,13 @@
 import React from 'react';
 
+/**
+ * @description Renders a picture, title, and list of authors for a book
+ * @param {array} lists - A list of possible book shelves
+ * @param {object} book - The book we will be displaying info for
+ * @param {func} updateBook - Updates the shelf for a particular book
+ */
 export default ({ lists, book, updateBook }) => {
+  //The styling for the book thumbnail
   const tumbnailStyle = {
     width: 128,
     height: 193,

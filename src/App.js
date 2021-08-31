@@ -5,10 +5,14 @@ import './App.css';
 import BookHome from './BookHome.js';
 import BookSearch from './BookSearch.js';
 
+//List of possible search terms
 const searchTerms = [
   'Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket', 'Cycling', 'Desai', 'Design', 'Development', 'Digital', 'Marketing', 'Drama', 'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film', 'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey', 'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make', 'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting', 'Philosophy', 'Photography', 'Poetry', 'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual', 'Reality', 'Web Development', 'iOS'
 ];
 
+/**
+ * @constructor The main books app component
+ */
 export default class BooksApp extends Component {
   state = {
     lists: [
@@ -22,6 +26,9 @@ export default class BooksApp extends Component {
     timeout: ''
   };
 
+  /**
+   * @description Get books with a shelf
+   */
   componentDidMount = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({
@@ -30,6 +37,10 @@ export default class BooksApp extends Component {
     });
   };
 
+  /**
+   * @description Search books using a search term
+   * @param {string} searchTerm - text required to search for books
+   */
   searchBooks = (searchTerm) => {
     this.state.timeout && clearTimeout(this.state.timeout);
 
@@ -62,6 +73,11 @@ export default class BooksApp extends Component {
     });
   };
 
+  /**
+   * @description Update the shelf of a book
+   * @param {object} book - The book moving to a new shelf
+   * @param {string} list - The shelf that the book should be moved to
+   */
   updateBook = (book, list) => {
     BooksAPI.update(book, list).then();
 
@@ -105,6 +121,9 @@ export default class BooksApp extends Component {
     }
   };
 
+  /**
+   * @description Reset search results
+   */
   resetSearch = () => {
     this.setState({
       searchTerm: '',
@@ -112,6 +131,9 @@ export default class BooksApp extends Component {
     });
   };
 
+  /**
+   * @description Renders the books app interface
+   */
   render() {
     const { lists, books, searchTerm, searchResults } = this.state;
 
