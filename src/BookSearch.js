@@ -7,6 +7,11 @@ import BookList from './BookList.js';
  * @constructor
  */
 export default class BookSearch extends Component {
+  state = {
+    searchTerm: '',
+    timerId: ''
+  };
+
   /**
    * @description Reset the search results
    */
@@ -15,14 +20,43 @@ export default class BookSearch extends Component {
   };
 
   /**
-   * @description Search books using the entered search term or reset search if not search term
-   * @param {object} e - The event containing the search term in the value property of the target
+   * @description Search books using the entered search term or reset * * search if not search term
+   * @param {object} e - The event containing the search term in the * * value property of the target
    */
   handleSearch = (e) => {
-    if (e.target.value) {
-      this.props.searchBooks(e.target.value);
+    let searchTerm = e.target.value;
+
+    this.setState({
+      searchTerm
+    });
+
+    if (this.state.timerId) {
+      this.clearTimer();
+    }
+
+    if (searchTerm) {
+      this.setState({
+        timerId: setTimeout(() => {
+          this.props.searchBooks(searchTerm);
+        }, 500)
+      });
+
     } else {
       this.props.resetSearch();
+    }
+  };
+
+  /**
+   * @description Clears the currently queued js timer
+   */
+  clearTimer = () => {
+    if (this.state.timerId) {
+      clearTimeout(this.state.timerId);
+      console.log('clear...', this.state.timerId);
+
+      this.setState({
+        timerId: ''
+      });
     }
   };
 
@@ -30,7 +64,8 @@ export default class BookSearch extends Component {
    * @description Renders books search interface
    */
   render() {
-    const { lists, searchTerm, searchResults, updateBook } = this.props;
+    const { lists, searchResults, updateBook } = this.props;
+    const { searchTerm } = this.state;
 
     return (
       <div className="search-books">

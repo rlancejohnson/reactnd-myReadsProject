@@ -5,11 +5,6 @@ import './App.css';
 import BookHome from './BookHome.js';
 import BookSearch from './BookSearch.js';
 
-//List of possible search terms
-const searchTerms = [
-  'Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket', 'Cycling', 'Desai', 'Design', 'Development', 'Digital', 'Marketing', 'Drama', 'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film', 'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey', 'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make', 'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting', 'Philosophy', 'Photography', 'Poetry', 'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual', 'Reality', 'Web Development', 'iOS'
-];
-
 /**
  * The main books app component
  * @constructor
@@ -22,9 +17,7 @@ export default class BooksApp extends Component {
       { id: 2, title: 'Read', name: 'read' }
     ],
     books: [],
-    searchTerm: '',
-    searchResults: [],
-    timeout: ''
+    searchResults: []
   };
 
   /**
@@ -43,35 +36,20 @@ export default class BooksApp extends Component {
    * @param {string} searchTerm - text required to search for books
    */
   searchBooks = (searchTerm) => {
-    this.state.timeout && clearTimeout(this.state.timeout);
+    BooksAPI.search(searchTerm, 20)
+      .then((results) => {
+        if (results && results.length > 0) {
+          this.setState({
+            searchResults: results.filter(result => result.authors && result.imageLinks && result.imageLinks.smallThumbnail).map(item => {
+              const book = this.state.books.find(item2 => item2.id === item.id);
 
-    this.setState({
-      searchTerm,
-      timeout: setTimeout(() => {
-        let term = '';
+              item['shelf'] = book ? book.shelf : '';
 
-        searchTerm.trim().includes(' ') ? searchTerm.trim().split(' ').forEach(word => term += word[0].toUpperCase() + word.substring(1) + ' ') : term = searchTerm[0].toUpperCase() + searchTerm.substring(1);
-
-        term = term.trim();
-
-        if (searchTerms.includes(term)) {
-          BooksAPI.search(term, 20)
-            .then((results) => {
-              if (results && results.length > 0) {
-                this.setState({
-                  searchResults: results.filter(result => result.authors && result.imageLinks && result.imageLinks.smallThumbnail).map(item => {
-                    const book = this.state.books.find(item2 => item2.id === item.id);
-
-                    item['shelf'] = book ? book.shelf : '';
-
-                    return item;
-                  })
-                });
-              }
-            });
+              return item;
+            })
+          });
         }
-      }, 500)
-    });
+      });
   };
 
   /**
@@ -127,7 +105,6 @@ export default class BooksApp extends Component {
    */
   resetSearch = () => {
     this.setState({
-      searchTerm: '',
       searchResults: []
     });
   };
@@ -136,7 +113,7 @@ export default class BooksApp extends Component {
    * @description Renders the books app interface
    */
   render() {
-    const { lists, books, searchTerm, searchResults } = this.state;
+    const { lists, books, searchResults } = this.state;
 
     return (
       <Router>
@@ -146,7 +123,6 @@ export default class BooksApp extends Component {
           </Route>
           <Route path="/search">
             <BookSearch lists={lists}
-              searchTerm={searchTerm}
               searchBooks={this.searchBooks}
               searchResults={searchResults}
               updateBook={this.updateBook}
